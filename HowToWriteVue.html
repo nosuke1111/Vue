@@ -1,0 +1,212 @@
+Vueのメモ
+
+基本
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Shopping List App</title>
+        <!-- <link rel="stylesheet" href="main.css"> -->
+    </head>
+    <body>
+    <div id="shopping-list">
+        <h1>{{ header }}</h1>
+        <input type="text" v-model="header">
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var shoppingList = new Vue({
+        el: '#shopping-list',
+        data: {
+            header: 'Vue is ready to party!'
+        }
+        });
+    </script>
+    </body>
+    </html>
+
+コンソール
+    デベロッパーツール（ctrl+shift+I）
+    vueで選択
+    $vm0.saveItem()などを指定
+
+v-for
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Shopping List App</title>
+        <!-- <link rel="stylesheet" href="main.css"> -->
+    </head>
+    <body>
+    <div id="shopping-list">
+        <ul>
+        <li v-for="item in items">{{ item }}</li>
+        </ul>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var shoppingList = new Vue({
+        el: '#shopping-list',
+        data: {
+            items: [
+            '10 party hats',
+            '2 board games',
+            '20 cups',
+            ]
+        }
+        });
+    </script>
+    </body>
+    </html>
+
+v-on
+    クリックイベントなどを検出し、メソッドの実行などができる
+    v-on:は@で代用が可能
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Shopping List App</title>
+        <!-- <link rel="stylesheet" href="main.css"> -->
+    </head>
+    <body>
+    <div id="shopping-list">
+        <h1>{{ header }}</h1>
+        <!-- v-on:keyup.enterで、enterキーを押すイベントをキャッチできる（itemsに追加できる） -->
+        <input v-model="newItem" type="text" placeholder="Add an item"  v-on:keyup.enter="items.push(newItem)">
+        <!-- buttonを押しても、（itemsに追加できる） -->
+        <button v-on:click="items.push(newItem)" class="btn btn-primary">Save item</button>
+        <div class="add-item-form">
+        <ul>
+            <li v-for="item in items">{{ item }}</li>
+        </ul>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var shoppingList = new Vue({
+        el: '#shopping-list',
+        data: {
+            header: 'Vue is ready to party!',
+            newItem: '',
+            items: [
+            '10 party hats',
+            '2 board games',
+            '20 cups',
+            ]
+        }
+        });
+    </script>
+    </body>
+    </html>
+
+methods
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Shopping List App</title>
+        <!-- <link rel="stylesheet" href="main.css"> -->
+    </head>
+    <body>
+    <div id="shopping-list">
+        <h1>{{ header }}</h1>
+        <input v-model="newItem" type="text" placeholder="Add an item"  @keyup.enter="saveItem">
+        <button @click="saveItem" class="btn btn-primary">Save item</button>
+        <div class="add-item-form">
+        <ul>
+            <li v-for="item in items">{{ item }}</li>
+        </ul>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var shoppingList = new Vue({
+        el: '#shopping-list',
+        data: {
+            header: 'Vue is ready to party!',
+            newItem: '',
+            items: [
+            '10 party hats',
+            '2 board games',
+            '20 cups',
+            ]
+        },
+        methods: {
+            saveItem: function() {
+            this.items.push(this.newItem);
+            this.newItem = '';
+            }
+        }
+        });
+    </script>
+    </body>
+    </html>
+
+v-if,v-else
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Shopping List App</title>
+        <!-- <link rel="stylesheet" href="main.css"> -->
+    </head>
+    <body>
+    <div id="shopping-list">
+        <div class="header">
+        <h1>{{ header }}</h1>
+        <button v-if="state === 'default'" class="btn btn-primary" @click="changeState('edit')">Add item</button>
+        <button v-else class="btn btn-cancel" @click="changeState('default')">Cancel</button>
+        </div>
+        <div v-if="state === 'edit'" class="add-item-form">
+        <input v-model="newItem" type="text" placeholder="Add an item"  @keyup.enter="saveItem">
+        <button @click="saveItem" class="btn btn-primary">Save item</button>
+        </div>
+        <ul>
+        <li v-for="item in items">{{ item }}</li>
+        </ul>
+        <p v-if="items.length === 0">Nice job! You've bought all your items.</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        var shoppingList = new Vue({
+        el: '#shopping-list',
+        data: {
+            state: 'default', 
+            header: 'Vue is ready to party!',
+            newItem: '',
+            items: [
+            // '10 party hats',
+            // '2 board games',
+            // '20 cups',
+            ]
+        },
+        methods: {
+            saveItem: function() {
+            this.items.push(this.newItem);
+            this.newItem = '';
+            },
+            changeState: function(newState) {
+            this.state = newState;
+            this.newItem = '';
+            }
+        }
+        });
+    </script>
+    </body>
+    </html>
+
+
+Vue CLI(Command Line Interface)
+    めんどい仕事をだいたいやってくれちゃう
+    インストール方法
+        Node.js
+            https://nodejs.org/ja/
+            node -vで確認
+            npm -vで確認
+        Vue CLI
+            npm i -g @vue/cli
+            （errorになるなら、sudo npm install -g vue-cli）
+            vue --versionで確認
+        vue create <プロジェクト名>
